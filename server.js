@@ -13,9 +13,15 @@ http.listen(port, function () {
 
 var http = require("http");
 
-http.createServer(function(request, response) {
-  console.log(request.socket.address());
+var server = http.createServer(function(request, response) {
+  console.log(request.headers['user-agent']);
   response.writeHead(200, {"Content-Type": "text/plain"});
   response.write("This is leha");
   response.end();
-}).listen(process.env.PORT || 80);
+});
+
+server.on('connection', function(sock) {
+  console.log('Client connected from ' + sock.remoteAddress);
+});
+
+server.listen(process.env.PORT || 80)
